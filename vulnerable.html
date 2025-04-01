@@ -18,13 +18,13 @@
         <h1>Simple Blog</h1>
         <div class="post-form">
             <h2>Add a New Post</h2>
-            <form onsubmit="addPost(event)">
+            <form>
                 <textarea id="postContent" rows="4" cols="50"></textarea><br><br>
                 <button type="submit">Submit Post</button>
             </form>
         </div>
 
-        <button onclick="clearPosts()">Clear Posts</button>
+        <button>Clear Posts</button>
 
         <div class="search-form">
             <h2>Search Posts</h2>
@@ -40,61 +40,6 @@
         
         <ul id="posts"></ul>
 
-
-        <script>
-            function addPost(event) {
-                event.preventDefault();
-
-                // Get the post content
-                const content = document.getElementById('postContent').value;
-                // Create new list item - VULNERABLE TO XSS
-                const li = document.createElement('li');
-                li.innerHTML = content;  // This is the vulnerable part!
-                
-                // Add the new post to the list
-                document.getElementById('posts').appendChild(li);
-                
-                // Save the post to localStorage
-                savePost(content);
-                
-                // Clear the input
-                document.getElementById('postContent').value = '';
-            }
-
-            function savePost(content) {
-                let posts = JSON.parse(localStorage.getItem('posts')) || [];
-                posts.push(content);
-                localStorage.setItem('posts', JSON.stringify(posts));
-            }
-
-            function loadPosts() {
-                let posts = JSON.parse(localStorage.getItem('posts')) || [];
-                posts.forEach(content => {
-                    const li = document.createElement("li");
-                    li.innerHTML = content;  // This is the vulnerable part!
-                    document.getElementById('posts').appendChild(li);
-                });
-            }
-
-            function clearPosts(){
-                localStorage.removeItem('posts');
-                document.getElementById('posts').innerHTML = '';
-            }
-
-            // Function to get query parameter from URL
-            function getQueryParam(param) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(param);
-            }
-
-            // Display the search query
-            const searchQuery = getQueryParam('search');
-            if (searchQuery) {
-                document.getElementById('searchQuery').innerHTML = `Searching for: ${searchQuery}`; // Vulnerable to XSS
-            }
-
-            // Load posts on page load
-            window.onload = loadPosts;
-        </script>
+        <script src="vulnerable.js"></script>
     </body>
 </html>
